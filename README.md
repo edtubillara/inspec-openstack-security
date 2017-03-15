@@ -93,6 +93,19 @@ bundle exec inspec exec . \
     check-image-03 check-image-04
 ```
 
+### Telemetry controls
+
+```shell
+inspec exec . --controls check-telemetry-01 check-telemetry-02 \
+                check-telemetry-03 check-telemetry-04 \
+                --attrs attributes.yml
+```
+
+attributes.yml has the following contents
+```yaml
+ceilometer_enabled: true
+```
+
 # To Do
 
 https://github.com/chef-partners/inspec-openstack-security/issues

@@ -1,37 +1,33 @@
-# check-swift-01
-describe file('/etc/swift/swift.conf') do
-  it { should be_owned_by 'root' }
-  its('group') { should eq 'swift' }
-end
-describe file('/etc/swift/api-paste.ini') do
-  it { should be_owned_by 'root' }
-  its('group') { should eq 'swift' }
-end
-describe file('/etc/swift/policy.json') do
-  it { should be_owned_by 'root' }
-  its('group') { should eq 'swift' }
-end
-describe file('/etc/swift/rootwrap.conf') do
-  it { should be_owned_by 'root' }
-  its('group') { should eq 'swift' }
+
+swift_conf_dir = '/etc/swift'
+
+default_config_files = %w(
+  swift.conf
+  api-paste.ini
+  policy.json
+  rootwrap.conf
+)
+
+config_files = attribute('swift_config_files', default: default_config_files, description: 'Swift configuration files')
+
+control 'check-swift-01' do
+  title 'Swift config files should be owned by root user and swift group.'
+  config_files.each do |swift_conf_file|
+    describe file("#{swift_conf_dir}/#{swift_conf_file}")
+      it { should be_owned_by 'root' }
+      its('group') { should eq 'swift' }
+    end
+  end
 end
 
-# check-swift-02
-describe file('/etc/swift/swift.conf') do
-  its('mode') { should eq 0640 }
-  it { should exist }
-end
-describe file('/etc/swift/api-paste.ini') do
-  its('mode') { should eq 0640 }
-  it { should exist }
-end
-describe file('/etc/swift/policy.json') do
-  its('mode') { should eq 0640 }
-  it { should exist }
-end
-describe file('/etc/swift/rootwrap.conf') do
-  its('mode') { should eq 0640 }
-  it { should exist }
+control 'check-swift-02' do
+  title 'Strict permissions should be set for all Swift config files.'
+  config_files.each do |swift_conf_file|
+    describe file("#{swift_conf_dir}/#{swift_conf_file}") do
+      its('mode') { should cmp '0640' }
+      it { should exist }
+    end
+  end
 end
 
 # Default listening ports for the various storage services

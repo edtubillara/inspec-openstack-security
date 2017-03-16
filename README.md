@@ -93,6 +93,21 @@ bundle exec inspec exec . \
     check-image-03 check-image-04
 ```
 
++### Telemetry Alarming  controls
+
+```shell
+bundle exec inspec exec . \
+  --controls check-telemetry-alarming-01 check-telemetry-alarming-02 \
+    check-telemetry-alarming-03 \
+    check-orchestration-03 --attrs attributes.yml
+```
+
+attributes.yml has the following contents
+```yaml
+aodh_enabled: true
+```
+
+
 # To Do
 
 https://github.com/chef-partners/inspec-openstack-security/issues
